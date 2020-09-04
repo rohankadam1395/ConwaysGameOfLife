@@ -1,0 +1,19 @@
+#canvasHold{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+        /* width: 50%;
+        
+    height: 50%; */
+    /* width: 50%; */
+background-color: rebeccapurple;
+
+}
+
+#canvas{
+    box-sizing: border-box;
+    /* width: 600;
+    height: 300; */
+    background-color: powderblue;
+}

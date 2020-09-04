@@ -1,15 +1,10 @@
 #home{
-    width: 100vw;
-    min-height: 100vh;
     background-color: pink;
     display: flex;
     justify-content: center;
     align-items: center;
+min-height: 100vh;
+width: 100vw;
 
 }
 
-#canvas{
-    width: 50%;
-    height: 50%;
-    background-color: powderblue;
-}
