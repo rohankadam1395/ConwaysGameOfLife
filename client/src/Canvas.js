@@ -5,9 +5,9 @@ constructor(props){
 super(props);
 
 this.state={
-    canvasRef:React.createRef(null),
-    generations:0
+    canvasRef:React.createRef(null)
 }
+this.generations=0;
 this.handleClick=this.handleClick.bind(this);
 this.activeArray=[];
 this.inactiveArray=[];
@@ -73,10 +73,14 @@ fillArray(activeArray,context){
         if(activeArray[i][j]===1){
             // console.log("Hello");
 context.fillStyle="#32CD32";
-context.fillRect(j*this.cellSize,i*this.cellSize,this.cellSize,this.cellSize);
+context.strokeStyle="red";
+context.fillRect(j*this.cellSize,i*this.cellSize,this.cellSize-1,this.cellSize-1);
         }else{
         context.fillStyle="#000000";
-        context.fillRect(j*this.cellSize,i*this.cellSize,this.cellSize,this.cellSize);
+        context.strokeStyle="red";
+
+        context.fillRect(j*this.cellSize,i*this.cellSize,this.cellSize-1,this.cellSize-1);
+        context.strokeRect(j*this.cellSize,i*this.cellSize,this.cellSize,this.cellSize);
 
             // console.log("Not Hello");
 
@@ -101,6 +105,10 @@ clearInterval(this.timer);
         }
         this.activeArray=this.inactiveArray;
          this.fillArray(this.activeArray,this.context); 
+this.generations++;
+        //  this.setState({
+        //      generations:++this.state.generations
+        //  })
     }, 300);
     
 }
@@ -263,7 +271,10 @@ let j=event.clientY-this.canvas.getBoundingClientRect().top-(event.clientY-this.
  this.activeArray[j/this.cellSize][i/this.cellSize]=1;
 this.context.fillStyle="#32CD32";
 // console.log((event.clientX-x));
-this.context.fillRect(i,j,this.cellSize,this.cellSize);
+this.context.fillRect(i,j,this.cellSize-1,this.cellSize-1);
+// this.context.strokeStyle="blue";
+
+// this.context.strokeRect(j*this.cellSize,i*this.cellSize,this.cellSize,this.cellSize);
 
 // console.log(event.clientY);
 
@@ -277,7 +288,7 @@ render(){
 <button onClick={this.randomize}>Randomize</button>
 <div id="displayBox">
     <h4>Generations</h4>
-    <h4>{this.state.generations}</h4>
+    <h4>{this.generations}</h4>
 </div>
 <button onClick={this.update}>Start</button>
 <button onClick={this.stop}>Stop</button>

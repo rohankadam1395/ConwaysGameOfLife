@@ -7,15 +7,17 @@
         
     height: 50%; */
     /* width: 50%; */
-background-color: rebeccapurple;
+    background-color: rosybrown;
+    /* border: 2px solid black; */
 
 }
 
 #canvas{
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
     /* width: 600;
     height: 300; */
     background-color: powderblue;
+    /* border: 2px solid red; */
 }
 
 #displayBox{
