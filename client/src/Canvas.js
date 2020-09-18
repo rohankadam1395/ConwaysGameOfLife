@@ -12,10 +12,13 @@ inactiveArray:[],
 neighbours:[],
 canvas:"",
 context:"",
-cellSize:50,
+cellSize:25,
 timer:"",
 left:0,
-top:0
+top:0,
+colorUnfilled:"#D4D6B9",
+colorfilled:"green"
+
 }
 
 // this.generations=0;
@@ -112,14 +115,14 @@ fillArray(activeArray,context){
         // console.log(this.activeArray[i][j]+"  ???");
         if(activeArray[i][j]===1){
             // console.log("Hello");
-context.fillStyle="#556B2F";
-context.strokeStyle="red";
+context.fillStyle=this.state.colorfilled;
+context.strokeStyle="black";
 context.fillRect(j*this.state.cellSize,i*this.state.cellSize,this.state.cellSize-1,this.state.cellSize-1);
 context.strokeRect(j*this.state.cellSize,i*this.state.cellSize,this.state.cellSize,this.state.cellSize);
 
         }else{
-        context.fillStyle="#3CB371";
-        context.strokeStyle="red";
+        context.fillStyle=this.state.colorUnfilled;
+        context.strokeStyle="black";
 
         context.fillRect(j*this.state.cellSize,i*this.state.cellSize,this.state.cellSize-1,this.state.cellSize-1);
         context.strokeRect(j*this.state.cellSize,i*this.state.cellSize,this.state.cellSize,this.state.cellSize);
@@ -293,14 +296,16 @@ top:this.canvasRef.current.getBoundingClientRect().top
     this.initialize(this.state.activeArray);
 
 })
-// console.log(this.context.canvas.width);
-// console.log(window.innerWidth);
-// console.log(this.context.canvas.getBoundingClientRect().left);
-// console.log(this.context.canvas.getBoundingClientRect().right);
+console.log(this.canvasRef.current.width);
+console.log(window.innerWidth);
+console.log(this.canvasRef.current.height);
+console.log(window.innerHeight);
+console.log(this.canvasRef.current.getBoundingClientRect().left);
+console.log(this.canvasRef.current.getBoundingClientRect().right);
 
-// // console.log(context.canvas.height);
-// console.log("CellsX "+this.cellsX);
-// console.log("CellsY "+this.cellsY);
+// console.log(context.canvas.height);
+console.log("CellsX "+this.cellsX);
+console.log("CellsY "+this.cellsY);
 // const activeArray=[];
 
 
@@ -395,9 +400,9 @@ let j=event.clientY-this.state.canvas.getBoundingClientRect().top-(event.clientY
 let activeTemp=this.state.activeArray.slice();
 activeTemp[j/this.state.cellSize][i/this.state.cellSize]=1;
 let tempContext=this.state.context;
-tempContext.fillStyle="#556B2F";
+tempContext.fillStyle=this.state.colorfilled;
 tempContext.fillRect(i+1,j,this.state.cellSize-2,this.state.cellSize-1);
-tempContext.strokeStyle="red";
+tempContext.strokeStyle="black";
 tempContext.strokeRect(j*this.state.cellSize,i*this.state.cellSize,this.state.cellSize,this.state.cellSize);
 
 
@@ -419,9 +424,12 @@ this.setState({
 
 
 render(){
+    let width=(window.innerWidth/2)%25<25 ? (window.innerWidth/2)-(window.innerWidth/2)%25 : (window.innerWidth/2)+(100-(window.innerWidth/2)%25);
+    let height=(window.innerHeight/2)%25<25 ? (window.innerHeight/2)-(window.innerHeight/2)%25 : (window.innerHeight/2)+(100-(window.innerHeight/2)%25);
+
     return (
         <div id="canvasHold" >
- <canvas width="800" height="400" id="canvas" ref={this.canvasRef} onClick={this.handleClick} ></canvas>
+ <canvas width={width} height={height} id="canvas" ref={this.canvasRef} onClick={this.handleClick} ></canvas>
 <button onClick={this.randomize}>Randomize</button>
 <div id="displayBox">
     <h4>Generations</h4>

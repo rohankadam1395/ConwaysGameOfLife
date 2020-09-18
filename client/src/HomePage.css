@@ -1,9 +1,9 @@
 #home{
-    background-color:#2E8B57;
+    background-color:#383B53;
     display: flex;
     justify-content: center;
     align-items: center;
-min-height: 100vh;
+height: 100vh;
 width: 100vw;
 
 }
