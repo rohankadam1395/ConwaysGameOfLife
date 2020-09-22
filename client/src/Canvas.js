@@ -17,7 +17,9 @@ timer:"",
 left:0,
 top:0,
 colorUnfilled:"#D4D6B9",
-colorfilled:"green"
+colorfilled:"green",
+ width:(window.innerWidth/2)%25<25 ? (window.innerWidth/2)-(window.innerWidth/2)%25 : (window.innerWidth/2)+(100-(window.innerWidth/2)%25),
+height:(window.innerHeight/2)%25<25 ? (window.innerHeight/2)-(window.innerHeight/2)%25 : (window.innerHeight/2)+(100-(window.innerHeight/2)%25)
 
 }
 
@@ -39,6 +41,7 @@ this.update=this.update.bind(this);
 this.stop=this.stop.bind(this);
 this.initialize=this.initialize.bind(this);
 this.clear=this.clear.bind(this);
+this.updateDimensions=this.updateDimensions.bind(this);
 
 }
 
@@ -46,7 +49,40 @@ stop(){
 clearInterval(this.state.timer);
 }
 
-initialize(){
+
+updateDimensions(){
+    let width=(window.innerWidth/2)%25<25 ? (window.innerWidth/2)-(window.innerWidth/2)%25 : (window.innerWidth/2)+(100-(window.innerWidth/2)%25);
+   let  height=(window.innerHeight/2)%25<25 ? (window.innerHeight/2)-(window.innerHeight/2)%25 : (window.innerHeight/2)+(100-(window.innerHeight/2)%25);
+
+setTimeout(()=>{
+if(width!=this.state.width || height!=this.state.height){
+    this.setState({
+        width:width,
+        height:height,
+        canvas:this.canvasRef.current,
+        context:this.canvasRef.current.getContext('2d'),
+        cellsX:width/this.state.cellSize,
+    cellsY:height/this.state.cellSize,
+    left:this.canvasRef.current.getBoundingClientRect().left,
+    top:this.canvasRef.current.getBoundingClientRect().top
+
+    },()=>{
+        // this.initialize();
+        // this.fillArray(temp,this.state.context);
+        this.initialize(false);
+        // this.fillArray(this.state.activeArray,this.state.context);
+    })
+
+
+}
+
+
+},500);
+
+   
+}
+
+initialize(randomize){
     clearInterval(this.state.timer);
     // let activeTemp=this.state.activeArray.slice();
     // let neightTemp=this.state.neighbours.slice();
@@ -58,15 +94,47 @@ initialize(){
 
         // this.state.activeArray[i]=[];
         // this.state.neighbours[i]=[];
-        activeTemp[i]=[];
-        neightTemp[i]=[];
+        if(this.state.activeArray.length>0){
+            activeTemp[i]=[];
+            neightTemp[i]=[];
+
+            // activeTemp[i]=this.state.activeArray[i];
+            // neightTemp[i]=this.state.neighbours[i];
 
 
-        for(let j=0;j<this.state.cellsX;j++){
-            activeTemp[i][j]=0;
-            neightTemp[i][j]=0;
+            for(let j=0;j<this.state.cellsX;j++){
+                // console.log(j);
+                if(this.state.activeArray[i]){
+                    // console.log(">>>>.. i "+i);
+                    activeTemp[i][j]=this.state.activeArray[i][j];
+                    neightTemp[i][j]=this.state.neighbours[i][j];
+        
+                }else{
+                    // console.log("yyyyy.. i "+i);
+
+                    activeTemp[i][j]=0;
+                    neightTemp[i][j]=0;   
+                }
+             
+            }
+
+
+        }else{
+            activeTemp[i]=[];
+            neightTemp[i]=[];
+
+
+
+            for(let j=0;j<this.state.cellsX;j++){
+                activeTemp[i][j]=0;
+                neightTemp[i][j]=0;
+    
+            }
 
         }
+
+
+     
         
         }
 
@@ -76,7 +144,10 @@ initialize(){
             inactiveArray:activeTemp
         },()=>{
             this.fillArray(this.state.activeArray,this.state.context);
-     this.randomize(this.state.activeArray);
+            if(randomize){
+                this.randomize(this.state.activeArray);
+
+            }
 
         });
         // this.state.inactiveArray=this.activeArray;
@@ -143,14 +214,25 @@ this.setState({
         
         this.countNeighbours();
 let inactiveTemp=this.state.inactiveArray.slice();
+
+
+
+let flag=false;
         for(let i=0;i<this.state.cellsY;i++){
             for(let j=0;j<this.state.cellsX;j++){
                 let state=this.checkRules(i,j);
+if(this.state.activeArray[i][j]!=state){
+flag=true;
+}
                 inactiveTemp[i][j]=state;
+
     
             }
         }
-        let tempState=this.state.generations;
+
+        if(flag){
+            console.log("It changed");
+            let tempState=this.state.generations;
         this.setState({
             inactiveArray:inactiveTemp,
             activeArray:inactiveTemp,
@@ -160,6 +242,12 @@ let inactiveTemp=this.state.inactiveArray.slice();
             // this.state.generations++;
 
         })
+        }else{
+            console.log("Now its not");
+            clearInterval(this.state.timer);
+
+        }
+        
         // this.state.activeArray=this.state.inactiveArray;
         //  this.fillArray(this.state.activeArray,this.state.context); 
 // this.state.generations++;
@@ -284,7 +372,9 @@ componentDidMount(){
 // this.state.cellsY=this.state.context.canvas.height/this.state.cellSize;
 // this.state.left=this.state.context.canvas.getBoundingClientRect().left;
 // this.state.top=this.state.context.canvas.getBoundingClientRect().top;
-// this.canvasRef=this.canvasRef.current;
+// this.canvasRef=this.canvasRef.current;'
+
+window.addEventListener("resize",this.updateDimensions);
 this.setState({
     canvas:this.canvasRef.current,
     context:this.canvasRef.current.getContext('2d'),
@@ -293,7 +383,7 @@ cellsY:this.canvasRef.current.height/this.state.cellSize,
 left:this.canvasRef.current.getBoundingClientRect().left,
 top:this.canvasRef.current.getBoundingClientRect().top
 },()=>{
-    this.initialize(this.state.activeArray);
+    this.initialize(true);
 
 })
 console.log(this.canvasRef.current.width);
@@ -336,6 +426,10 @@ console.log("CellsY "+this.cellsY);
 
 // context.fillRect(0,0,context.canvas.width,context.canvas.height);
 
+}
+
+componentWillUnmount(){
+    window.removeEventListener("resize",this.updateDimensions);
 }
 
 
@@ -424,12 +518,12 @@ this.setState({
 
 
 render(){
-    let width=(window.innerWidth/2)%25<25 ? (window.innerWidth/2)-(window.innerWidth/2)%25 : (window.innerWidth/2)+(100-(window.innerWidth/2)%25);
-    let height=(window.innerHeight/2)%25<25 ? (window.innerHeight/2)-(window.innerHeight/2)%25 : (window.innerHeight/2)+(100-(window.innerHeight/2)%25);
+    // let width=(window.innerWidth/2)%25<25 ? (window.innerWidth/2)-(window.innerWidth/2)%25 : (window.innerWidth/2)+(100-(window.innerWidth/2)%25);
+    // let height=(window.innerHeight/2)%25<25 ? (window.innerHeight/2)-(window.innerHeight/2)%25 : (window.innerHeight/2)+(100-(window.innerHeight/2)%25);
 
     return (
         <div id="canvasHold" >
- <canvas width={width} height={height} id="canvas" ref={this.canvasRef} onClick={this.handleClick} ></canvas>
+ <canvas width={this.state.width} height={this.state.height} id="canvas" ref={this.canvasRef} onClick={this.handleClick} ></canvas>
 <button onClick={this.randomize}>Randomize</button>
 <div id="displayBox">
     <h4>Generations</h4>

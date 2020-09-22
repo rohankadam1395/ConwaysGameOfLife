@@ -11,6 +11,8 @@ class HomePage extends React.Component{
 
 render(){
     return(<div id="home">
+                    <h1>Conway's Game Of Life</h1>
+
 <Canvas />
     </div>)
 }
