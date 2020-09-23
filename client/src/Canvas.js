@@ -19,8 +19,8 @@ top:0,
 colorUnfilled:"#D4D6B9",
 colorfilled:"green",
  width:(window.innerWidth/2)%25<25 ? (window.innerWidth/2)-(window.innerWidth/2)%25 : (window.innerWidth/2)+(100-(window.innerWidth/2)%25),
-height:(window.innerHeight/2)%25<25 ? (window.innerHeight/2)-(window.innerHeight/2)%25 : (window.innerHeight/2)+(100-(window.innerHeight/2)%25)
-
+height:(window.innerHeight/2)%25<25 ? (window.innerHeight/2)-(window.innerHeight/2)%25 : (window.innerHeight/2)+(100-(window.innerHeight/2)%25),
+patterns:[],
 }
 
 // this.generations=0;
@@ -42,7 +42,8 @@ this.stop=this.stop.bind(this);
 this.initialize=this.initialize.bind(this);
 this.clear=this.clear.bind(this);
 this.updateDimensions=this.updateDimensions.bind(this);
-
+this.patternSet=this.patternSet.bind(this);
+this.savePattern=this.savePattern.bind(this);
 }
 
 stop(){
@@ -84,19 +85,29 @@ if(width!=this.state.width || height!=this.state.height){
 
 initialize(randomize){
     clearInterval(this.state.timer);
+    // this.clear();
     // let activeTemp=this.state.activeArray.slice();
     // let neightTemp=this.state.neighbours.slice();
     let activeTemp=[];
     let neightTemp=[];
+    console.log("In Initialize");
+
+
+    
+
     for(let i=0;i<this.state.cellsY;i++){
 
        
 
         // this.state.activeArray[i]=[];
         // this.state.neighbours[i]=[];
-        if(this.state.activeArray.length>0){
+        // console.log(i);
+        // console.log(this.state.activeArray[i]);
+        if(this.state.activeArray.length){
+            // console.log("activeArray length > 0 for i = "+i)
             activeTemp[i]=[];
-            neightTemp[i]=[];
+
+            // neightTemp[i]=[];
 
             // activeTemp[i]=this.state.activeArray[i];
             // neightTemp[i]=this.state.neighbours[i];
@@ -106,20 +117,26 @@ initialize(randomize){
                 // console.log(j);
                 if(this.state.activeArray[i]){
                     // console.log(">>>>.. i "+i);
+                    // console.log("j "+j);
+                    // console.log(this.state.activeArray[i][j]);
                     activeTemp[i][j]=this.state.activeArray[i][j];
-                    neightTemp[i][j]=this.state.neighbours[i][j];
+
+
+                    // neightTemp[i][j]=this.state.neighbours[i][j];
         
                 }else{
                     // console.log("yyyyy.. i "+i);
 
                     activeTemp[i][j]=0;
-                    neightTemp[i][j]=0;   
+                    // neightTemp[i][j]=0;   
                 }
              
             }
 
 
         }else{
+            console.log("activeArray length ! > 0 for i = "+i)
+
             activeTemp[i]=[];
             neightTemp[i]=[];
 
@@ -155,6 +172,7 @@ initialize(randomize){
 }
 
 randomize(){
+    // this.clear();
     let activeTemp=this.state.activeArray.slice();
 
     for(let i=0;i<this.state.cellsY;i++){
@@ -175,6 +193,8 @@ randomize(){
 
         })
 // this.state.inactiveArray=this.state.activeArray;
+
+console.log("Randomized");
 }
 
 fillArray(activeArray,context){
@@ -231,7 +251,7 @@ flag=true;
         }
 
         if(flag){
-            console.log("It changed");
+            // console.log("It changed");
             let tempState=this.state.generations;
         this.setState({
             inactiveArray:inactiveTemp,
@@ -243,7 +263,7 @@ flag=true;
 
         })
         }else{
-            console.log("Now its not");
+            // console.log("Now its not");
             clearInterval(this.state.timer);
 
         }
@@ -516,6 +536,56 @@ this.setState({
 
 }
 
+savePattern(){
+//      let copy=[];
+//      copy=this.state.activeArray.slice();
+//    let ptrn=this.state.patterns.slice();
+//    ptrn.push(copy);
+
+    // let copy=[this.state.activeArray,...this.state.patterns];
+    // copy=this.state.patterns;
+    // copy.push(this.state.activeArray);
+    // console.log(copy);
+
+    let obj=JSON.parse(JSON.stringify(this.state.activeArray));
+let old=JSON.parse(JSON.stringify(this.state.patterns));
+console.log(obj);
+console.log(old);
+old.push(obj);
+console.log(old);
+
+this.setState({
+patterns:old,
+},()=>{
+    console.log("Length of array  "+this.state.patterns.length);
+    console.log(this.state.patterns);
+})
+console.log("In Pattern Save");
+}
+
+patternSet(index){  
+    console.log('in pattern set');
+console.log(index);
+console.log(this.state.patterns.slice());
+/// this.clear();
+this.setState({
+    activeArray:this.state.patterns[index],
+    inactiveArray:this.state.patterns[index]
+},()=>{
+
+// this.fillArray(this.state.activeArray,this.state.context);
+// this.countNeighbours();
+// this.updateDimensions();
+//this below state stattement is causing issue
+// this.fillArray(this.state.activeArray,this.state.context);
+// this.initialize(false);
+this.fillArray(this.state.activeArray,this.state.context);
+console.log("Pattern Set");
+
+})
+
+
+}
 
 render(){
     // let width=(window.innerWidth/2)%25<25 ? (window.innerWidth/2)-(window.innerWidth/2)%25 : (window.innerWidth/2)+(100-(window.innerWidth/2)%25);
@@ -531,7 +601,21 @@ render(){
 </div>
 <button onClick={this.update}>Start</button>
 <button onClick={this.stop}>Stop</button>
-<button onClick={this.clear}>Clear</button>    
+<button onClick={this.clear}>Clear</button>  
+<button onClick={this.savePattern}>Save Pattern</button>
+<div id="patterns">
+<h4>Patterns</h4>
+<ul>
+    {this.state.patterns.map((data,index)=>{
+return <li key={index} onClick={()=>this.patternSet(index)}>
+Pattern {index} 
+</li>
+    })}
+</ul>
+
+</div>
+
+ 
         </div>
        
 
