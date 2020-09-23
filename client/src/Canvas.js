@@ -44,6 +44,7 @@ this.clear=this.clear.bind(this);
 this.updateDimensions=this.updateDimensions.bind(this);
 this.patternSet=this.patternSet.bind(this);
 this.savePattern=this.savePattern.bind(this);
+this.handleSubmit=this.handleSubmit.bind(this);
 }
 
 stop(){
@@ -536,7 +537,7 @@ this.setState({
 
 }
 
-savePattern(){
+savePattern(name){
 //      let copy=[];
 //      copy=this.state.activeArray.slice();
 //    let ptrn=this.state.patterns.slice();
@@ -548,11 +549,20 @@ savePattern(){
     // console.log(copy);
 
     let obj=JSON.parse(JSON.stringify(this.state.activeArray));
-let old=JSON.parse(JSON.stringify(this.state.patterns));
+
+let old=this.state.patterns;
+// old=JSON.parse(JSON.stringify(this.state.patterns));
+
 console.log(obj);
+
+// console.log(old);
+let newObj={
+    name:name,
+    data:obj
+}
+old.push(newObj);
 console.log(old);
-old.push(obj);
-console.log(old);
+
 
 this.setState({
 patterns:old,
@@ -569,8 +579,8 @@ console.log(index);
 console.log(this.state.patterns.slice());
 /// this.clear();
 this.setState({
-    activeArray:this.state.patterns[index],
-    inactiveArray:this.state.patterns[index]
+    activeArray:this.state.patterns[index].data,
+    inactiveArray:this.state.patterns[index].data
 },()=>{
 
 // this.fillArray(this.state.activeArray,this.state.context);
@@ -583,6 +593,17 @@ this.fillArray(this.state.activeArray,this.state.context);
 console.log("Pattern Set");
 
 })
+
+
+}
+
+handleSubmit(event){
+    
+event.preventDefault();
+    // console.log(event.target.patternName.value);
+    let name=event.target.patternName.value;
+    this.savePattern(name);
+
 
 
 }
@@ -602,13 +623,22 @@ render(){
 <button onClick={this.update}>Start</button>
 <button onClick={this.stop}>Stop</button>
 <button onClick={this.clear}>Clear</button>  
-<button onClick={this.savePattern}>Save Pattern</button>
+<form onSubmit={this.handleSubmit}>
+    <input name="patternName" id="patternNameID" placeholder="Enter Name for pattern"/>
+    <button  type="submit">Save Pattern</button>
+
+
+</form>
+
 <div id="patterns">
 <h4>Patterns</h4>
 <ul>
     {this.state.patterns.map((data,index)=>{
+        // console.log(data);
 return <li key={index} onClick={()=>this.patternSet(index)}>
-Pattern {index} 
+Pattern {
+data.name ? data.name : index
+} 
 </li>
     })}
 </ul>
