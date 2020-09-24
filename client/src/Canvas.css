@@ -35,14 +35,18 @@ height: 100%; */
     }
 
     #patterns{
-        width: 100%;
+        width: 80%;
         display: flex;
         flex-direction: column;
         align-items: center;
+        justify-content: flex-start;
         background-color: #D4D6B9;
-        border: solid 2px black;
+        /* background-color: red; */
+
+        /* border: solid 2px black; */
         padding: 0px;
-        height: 4em;
+        height: 8em;
+        margin-bottom: 0.5em;
     
     
     }   
@@ -55,7 +59,7 @@ height: 100%; */
     border: 2px solid black;
     /* width:2em; */
     background-color: #D4D6B9;
-    width: 50%;
+    /* width: 50%; */
     /* width: 2em; */
 
     
@@ -88,7 +92,10 @@ li{
     border: 2px solid black;
     /* border-radius: 25px; */
     margin: 2px;
-    background-color: blanchedalmond;
+    /* background-color: blanchedalmond; */
+}
+li:hover{
+    background-color: burlywood;
 }
 
 span{
@@ -99,14 +106,21 @@ span{
     justify-content:space-between;
     align-items: center;
     color: black;
-    border: 2px solid black;
-    border-top: 0px;
+    /* border: 2px solid red; */
+    /* border-top: 0px; */
     width: 100%;
-    margin-top: 0px;
+    /* margin-top: 0px; */
+    border: 1px solid black;
 }
 
 #closeButton{
-    margin: 0;
+/* box-sizing: border-box; */
+    margin: 0px;
+    padding: 0.1em;
+    border-left: 1px solid black;
+    border-radius: 0px;
+    height: 100%;
+    /* width: 100%; */
 }
 
 #controls{

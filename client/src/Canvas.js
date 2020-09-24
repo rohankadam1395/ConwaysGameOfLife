@@ -6,7 +6,7 @@ class Canvas extends React.Component {
         this.canvasRef = React.createRef(null);
 
         this.state = {
-            showPattern:true,
+            showPattern:false,
             generations: 0,
             activeArray: [],
             inactiveArray: [],
@@ -111,7 +111,7 @@ class Canvas extends React.Component {
                 // console.log("activeArray length > 0 for i = "+i)
                 activeTemp[i] = [];
 
-                // neightTemp[i]=[];
+                neightTemp[i]=[];
 
                 // activeTemp[i]=this.state.activeArray[i];
                 // neightTemp[i]=this.state.neighbours[i];
@@ -126,13 +126,13 @@ class Canvas extends React.Component {
                         activeTemp[i][j] = this.state.activeArray[i][j];
 
 
-                        // neightTemp[i][j]=this.state.neighbours[i][j];
+                        neightTemp[i][j]=this.state.neighbours[i][j];
 
                     } else {
                         // console.log("yyyyy.. i "+i);
 
                         activeTemp[i][j] = 0;
-                        // neightTemp[i][j]=0;   
+                         neightTemp[i][j]=0;   
                     }
 
                 }
@@ -165,6 +165,7 @@ class Canvas extends React.Component {
             inactiveArray: activeTemp
         }, () => {
             this.fillArray(this.state.activeArray, this.state.context);
+            // this.countNeighbours();
             if (randomize) {
                 this.randomize(this.state.activeArray);
 
@@ -629,18 +630,22 @@ this.setState({
                         <h4>Generations</h4>
                         <h4>{this.state.generations}</h4>
                     </div>
+                    <div>
                     <button onClick={this.update}>Start</button>
                     <button onClick={this.stop}>Stop</button>
                     <button onClick={this.clear}>Clear</button>
-                    <form onSubmit={this.handleSubmit}>
+                    </div>
+                    
+                    
+                    {this.state.showPattern && <form onSubmit={this.handleSubmit}>
                         <input name="patternName" id="patternNameID" placeholder="Enter Name for pattern" />
                         <br />
                         <button type="submit">Save Pattern</button>
 
 
-                    </form>
-                    {!this.state.showPattern && <button onClick={this.toggle}>Show Patterns</button>
-}
+                    </form>}
+                    {!this.state.showPattern && <button onClick={this.toggle}>Show Patterns</button>}
+
 
 {this.state.showPattern &&
                     <div id="patterns">
