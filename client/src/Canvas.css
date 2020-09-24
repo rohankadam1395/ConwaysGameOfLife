@@ -51,14 +51,59 @@ h4{
     width: 100%;
     display: flex;
     flex-direction: column;
-    background-color: rgb(199, 199, 108);
-    color: white;
-    
+    align-items: center;
+    background-color: #D4D6B9;
+    border: solid 2px black;
+    padding: 0px;
+    height: 4em;
+
+
 }   
 ul{
+        /* background-color: green; */
     padding: 0;
+    margin: 0;
+    overflow-y: scroll;
+    width: 100%;
 }
+
+::-webkit-scrollbar{
+    background-color: #D4D6B9;
+}
+::-webkit-scrollbar-thumb{
+    background-color: #D4D6B9;
+    border: 2px solid black;
+    border-radius: 25px;
+}
+
 li{
     list-style: none;
-    background-color: green;
+    /* background-color: green; */
+    border: 2px solid black;
+    /* border-radius: 25px; */
+    margin: 2px;
+    background-color: blanchedalmond;
+}
+
+span{
+}
+
+#patternTitle{
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    color: black;
+    border: 2px solid black;
+    border-top: 0px;
+    width: 100%;
+    margin-top: 0px;
+}
+
+#closeButton{
+    margin: 0;
+}
+
+#controls{
+    /* background-color: yellow; */
+    width: 50%;
 }

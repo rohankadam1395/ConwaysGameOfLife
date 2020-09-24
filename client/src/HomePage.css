@@ -11,13 +11,14 @@ text-align: center;
 }
 
 button{
-    background-color:black;
-    color: white;
+    background-color:#D4D6B9;
+    color: black;
     /* width:20%; */
     border: none;
     margin: 0.5em;
     border-radius: 25px;
     font-weight: 600;
+    font-size: 15px;
 
 }
 
